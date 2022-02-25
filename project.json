@@ -1,0 +1,10 @@
+{
+  "project": "fxnet-cms",
+    
+  "git": "github.com/fixingthenet/fxnet-cms",
+  "path": "fxnet-cms",
+  "docker": {
+    "repo": "fxnet",
+    "name": "fxnet-cms"
+  }
+}

@@ -13,13 +13,11 @@
 !/log/.keep
 !/tmp/.keep
 
-# Ignore pidfiles, but keep the directory.
-/tmp/pids/*
-!/tmp/pids/
-!/tmp/pids/.keep
+/node_modules
+/yarn-error.log
 
-
-/public/assets
-
-# Ignore master key for decrypting credentials and more.
-/config/master.key
+.byebug_history
+/public/packs
+/node_modules
+*~
+spec/docker-compose.run.yml
