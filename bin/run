@@ -5,4 +5,3 @@ env
 cat /code/project.json
 #exec /code/bin/rails server -b 0.0.0.0 -p 3000
 exec bundle exec falcon serve -b http://0.0.0.0 -p 3000 -n 1
-

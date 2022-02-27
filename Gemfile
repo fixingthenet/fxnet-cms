@@ -9,7 +9,14 @@ gem "rails", "~> 7.0.2", ">= 7.0.2.2"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
 
+#async server
 gem 'falcon'
+
+#http client with async extension would be nice to use but: https://github.com/socketry/async-http-faraday/issues/22
+gem 'faraday'
+gem 'async-http-faraday'
+gem 'aws-sigv4' # I'd like to use aws-s3 but I can't: https://github.com/aws/aws-sdk-ruby/issues/2621
+gem 'aws-sdk-s3'
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
