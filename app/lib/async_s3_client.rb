@@ -7,8 +7,8 @@ class AsyncS3Client
     @secret_access_key=secret_access_key
     @region=region
   end
-  
-  
+
+
   def get_object(bucket:, key:)
     raise "need block" unless block_given?
     internet = Async::HTTP::Internet.new
@@ -20,16 +20,16 @@ class AsyncS3Client
       secret_access_key: @secret_access_key,
       unsigned_headers: ["content-length"]
     )
-    
+
     signature = signer.sign_request(
       http_method: 'GET',
       url: "https://#{host}#{key}",
       headers: {},
     )
-	
+
     headers=signature.headers
     headers["user-agent"]="Fxnet CMS client"
-    headers.delete('host')
+    headers.delete('host') # without this you'll get two host entries!
 
     Async do
       begin
@@ -37,16 +37,17 @@ class AsyncS3Client
         response.each do |chunk|
             yield response, chunk
         end
-      rescue 
+        yield response, :done
+      rescue
         logger.error("Error: #{$!}")
       ensure
        logger.info("Closing: #{host}#{key}")
        internet.close
       end
     end
-    
+
   end
-  
+
   def logger
     Rails.logger
   end

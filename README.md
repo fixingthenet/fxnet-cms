@@ -3,19 +3,23 @@
 Currently it has exactly one purpose:
  * Delivering some static files from a backend (currently S3 compatible only)
 
-Why not use S3 static website?
+Use cases:
 
-1. You could add authentification server with this in front of it 
-2. Use S3 compatible servers without static website feature
+1. Want to user your authentification proxy
+2. Use your own S3 compatible servers without static website feature
 
 # Setup
 
 Environment variables to set
- * AWS_ID, AWS_SECRET
- * AWS_S3_BUCKET_NAME
- * AWS_S3_PREFIX (optional)
+ * AWS_ACCESS_KEY_ID - an AWS key id for the bucket
+ * AWS_SECRET_ACCESS_KEY - an AWS secret for the bucket 
+ * S3_BUCKET - to serve files from
+ * APP_PORT - the port to run the server on
  
- 
+run the server:
+
+```bin/run```
+
 
 
 # Development

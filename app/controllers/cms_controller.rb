@@ -1,19 +1,26 @@
 class CmsController < ApplicationController
-  include ActionController::Live
-  
   def get
-    headers=nil
-    S3_CLIENT.get_object( bucket: 'metoda-assets', key: request.env['REQUEST_PATH']) do |resp, chunk|
-      unless headers
-        headers=resp.headers.to_h
-        logger.debug("Chunk received: #{headers}\n#{chunk.size}\n#{response.headers}\n#{chunk}\n")
-        response.headers["Content-Type"] = headers["content-type"]
-        response.headers.delete("Content-Length")
-        response.headers["Cache-Control"] = "no-cache"
+    s3_client=AsyncS3Client.new(
+      access_key_id:  ENV['AWS_ACCESS_KEY_ID'],
+      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+      region: 'eu-west-1'
+    )
+
+    response.headers["rack.hijack"] = lambda do |stream|
+      s3_client.get_object( bucket: ENV["S3_BUCKET"], key: "/#{params[:path]}.#{params[:format]}") do |resp, chunk|
+        if chunk == :done
+          stream.close
+          #logger.debug("CMS: Done, #{stream.class}")
+        else
+          #logger.debug("CMS: Chunk #{chunk.bytesize}")
+          stream.write(chunk)
+        end
       end
-      response.stream.write(chunk)
     end
-    logger.debug("Done")
-    response.stream.close
+
+    response.headers.delete("Content-Length")
+    response.headers["X-Accel-Buffering"] = "no"
+    response.headers["Content-Type"] = "text/plain"
+    head :ok
   end
 end
