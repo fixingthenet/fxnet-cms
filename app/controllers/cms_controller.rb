@@ -20,7 +20,7 @@ class CmsController < ApplicationController
 
     response.headers.delete("Content-Length")
     response.headers["X-Accel-Buffering"] = "no"
-    response.headers["Content-Type"] = "text/plain"
+    response.headers["Content-Type"] = Mime::Type.lookup_by_extension(params[:format] || 'txt')
     head :ok
   end
 end
